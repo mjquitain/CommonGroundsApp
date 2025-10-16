@@ -1,11 +1,11 @@
-import 'package:commongrounds/widgets/starting_button.dart';
 import 'package:flutter/material.dart';
+import 'package:commongrounds/widgets/starting_button.dart';
 import 'package:commongrounds/theme/colors.dart';
 import 'package:commongrounds/theme/typography.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:commongrounds/widgets/starting_textfield.dart';
-import 'sign_up_page.dart';
-import 'dashboard_page.dart';
+import 'package:commongrounds/pages/sign_up_page.dart';
+import 'package:commongrounds/pages/main_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -67,11 +67,11 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
     );
   }
 
-  void _goToDashboardPage() {
+  void _goToMainPage() {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-        const DashboardPage(),
+        const MainPage(),
         transitionsBuilder:
             (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
@@ -222,7 +222,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                             opacity: _fadeAnimation,
                             child: CustomButton(
                               text: 'Sign In',
-                              onPressed: _goToDashboardPage,
+                              onPressed: _goToMainPage,
                             ),
                           )
                         ],
