@@ -17,22 +17,30 @@ class TopNavbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.navbar.withOpacity(0.6),
-      elevation: 0,
-      title: Text(
-        pageTitle,
-        style: AppTypography.heading2.copyWith(
-          fontWeight: FontWeight.bold,
+      backgroundColor: AppColors.navbar,
+      title: Padding(
+        padding: const EdgeInsets.only(left: 15),
+        child: Text(
+          pageTitle,
+          style: AppTypography.heading2.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       actions: [
-        IconButton(
-          icon: const Icon(Icons.notifications_outlined, color: AppColors.icon),
-          onPressed: onNotificationTap,
-        ),
-        IconButton(
-          icon: const Icon(Icons.person_outlined, color: AppColors.icon),
-          onPressed: onProfileTap,
+        Padding(padding: const EdgeInsets.only(right: 20),
+          child: Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.notifications_outlined, color: AppColors.icon),
+                onPressed: onNotificationTap,
+              ),
+              IconButton(
+                icon: const Icon(Icons.person_outlined, color: AppColors.icon),
+                onPressed: onProfileTap,
+              ),
+            ],
+          ),
         ),
       ],
     );
