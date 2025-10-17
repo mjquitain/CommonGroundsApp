@@ -16,7 +16,7 @@ class BottomNavbar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: onTap,
-      backgroundColor: AppColors.navbar.withOpacity(0.6),
+      backgroundColor: AppColors.navbar,
       selectedItemColor: AppColors.icon,
       unselectedItemColor: AppColors.icon,
       showSelectedLabels: false,
