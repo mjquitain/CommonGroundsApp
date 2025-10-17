@@ -20,13 +20,15 @@ class _MainPageState extends State<MainPage> {
   final List<String> _pageTitles = [
     "Dashboard",
     "Learning Hub",
-    "Focus Mode"
+    "Focus Mode",
+    "Wasi"
   ];
 
   final List<Widget> _pages = const [
     DashboardPage(),
     LearningHubPage(),
     FocusModePage(),
+    WasiPage(),
   ];
 
   void _onNavTap(int index) {
