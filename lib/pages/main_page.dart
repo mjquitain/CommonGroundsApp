@@ -20,13 +20,15 @@ class _MainPageState extends State<MainPage> {
   final List<String> _pageTitles = [
     "Dashboard",
     "Learning Hub",
+    "Calendar",
     "Focus Mode",
-    "Wasi"
+    "Wasi",
   ];
 
   final List<Widget> _pages = const [
     DashboardPage(),
     LearningHubPage(),
+    CalendarPage(),
     FocusModePage(),
     WasiPage(),
   ];
