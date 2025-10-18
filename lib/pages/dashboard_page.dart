@@ -1,10 +1,12 @@
+import 'package:commongrounds/model/detailed_task.dart';
 import 'package:flutter/material.dart';
 import 'package:commongrounds/theme/colors.dart';
-import 'package:commongrounds/model/task.dart';
-import 'package:commongrounds/model/class.dart';
 import 'package:commongrounds/widgets/task_card_compact.dart';
 import 'package:commongrounds/widgets/class_card.dart';
 import 'package:commongrounds/theme/typography.dart';
+import 'package:commongrounds/widgets/task_preview_sheet.dart';
+import 'package:commongrounds/data/mock_detailed_tasks.dart';
+import 'package:commongrounds/data/mock_classes.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -14,75 +16,25 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  int _selectedIndex = 0;
+  final detailedtask = mockDetailedTasks;
+  final classes = mockClasses;
 
-  final List<Task> tasks = [
-    Task(
-      title: 'Math Assignment - Calculus Problem Set',
-      subject: 'MATH 201',
-      description: 'Complete problems 1–25 from Chapter 7.',
-      deadline: '2 days ago, Oct 13 2025',
-      priority: 'High',
-      status: 'Overdue',
-      progress: 0.0,
-      icon: Icons.calculate,
-    ),
-    Task(
-      title: 'Physics Lab Report',
-      subject: 'PHYS 102',
-      description: 'Write lab report on electromagnetic field experiments. Include data analysis and conclusions.',
-      deadline: 'Oct 20, 11:59 PM',
-      priority: 'Medium',
-      status: 'In Progress',
-      progress: 0.4,
-      icon: Icons.science,
-    ),
-    Task(
-      title: 'History Essay Draft',
-      subject: 'HIST 150',
-      description: 'Write first draft of essay on Industrial Revolution impacts on society.',
-      deadline: 'Oct 17, 11:59 PM',
-      priority: 'Low',
-      status: 'Not Started',
-      progress: 1.0,
-      icon: Icons.castle,
-    ),
-  ];
+  List<DetailedTask> getUpcomingTasks() {
+    final now = DateTime.now();
+    final upcoming = detailedtask.where((t) {
+      return t.deadline.isBefore(now.add(const Duration(days: 3))) ||
+          t.deadline.isBefore(now);
+    }).toList();
 
-  final List<ClassModel> classes = [
-    ClassModel(
-      name: 'Data Structures',
-      subject: 'CS 201',
-      time: '9:00 AM - 10:30 AM',
-      location: 'Room 204',
-      status: 'Ongoing',
-      icon: Icons.computer,
-    ),
-    ClassModel(
-      name: 'Linear Algebra',
-      subject: 'MATH 210',
-      time: '11:00 AM - 12:30 PM',
-      location: 'Room 305',
-      status: 'Upcoming',
-      icon: Icons.calculate,
-    ),
-    ClassModel(
-      name: 'Psychology 101',
-      subject: 'PSY 101',
-      time: '1:00 PM - 2:30 PM',
-      location: 'Room 112',
-      status: 'Cancelled',
-      icon: Icons.psychology_alt,
-    ),
-  ];
+    upcoming.sort((a, b) => a.deadline.compareTo(b.deadline));
 
-
-  void _onNavTap(int index) {
-    setState(() => _selectedIndex = index);
+    return upcoming.take(5).toList();
   }
+
 
   @override
   Widget build(BuildContext context) {
+    final tasksToShow = getUpcomingTasks();
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SingleChildScrollView(
@@ -90,8 +42,8 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -101,25 +53,36 @@ class _DashboardPageState extends State<DashboardPage> {
                       SizedBox(width: 8),
                       Text(
                         "Upcoming",
-                        style: AppTypography.heading1.copyWith(
-                          fontSize: 20,
-                        ),
+                        style: AppTypography.heading1.copyWith(fontSize: 20),
                       ),
                     ],
                   ),
                   const SizedBox(height: 6),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 2),
-                    child: ListView.builder(
-                      itemCount: tasks.length,
+                  if (tasksToShow.isEmpty)
+                    Text(
+                      "No upcoming tasks.",
+                      style: AppTypography.body.copyWith(color: Colors.grey),
+                    )
+                  else
+                    ListView.builder(
+                      itemCount: tasksToShow.length,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        final task = tasks[index];
-                        return TaskCardCompact(task: task);
+                        final task = tasksToShow[index];
+                        return GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              isScrollControlled: true,
+                              builder: (_) => TaskPreviewSheet(task: task),
+                            );
+                          },
+                          child: TaskCardCompact(task: task),
+                        );
                       },
                     ),
-                  ),
                 ],
               ),
             ),

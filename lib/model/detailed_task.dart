@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
-class Task {
+class DetailedTask {
   final String title;
   final String subject;
   final String description;
-  final String deadline;
+  final DateTime deadline;
   final String priority;
   final String status;
   final double progress;
   final IconData icon;
+  final String category;
 
-  Task({
+  DetailedTask({
     required this.title,
     required this.subject,
     required this.description,
@@ -19,5 +20,6 @@ class Task {
     required this.status,
     required this.progress,
     required this.icon,
+    required this.category,
   });
 }

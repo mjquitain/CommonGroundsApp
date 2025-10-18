@@ -16,7 +16,7 @@ class ClassCard extends StatelessWidget {
       case 'ongoing':
         return Colors.yellow;
       case 'upcoming':
-        return Colors.blueAccent;
+        return Colors.lightBlueAccent;
       case 'cancelled':
         return Colors.redAccent;
       case 'finished':
@@ -63,7 +63,7 @@ class ClassCard extends StatelessWidget {
                       padding: const EdgeInsets.all(8),
                       child: Icon(
                         classData.icon,
-                        size: 32,
+                        size: 28,
                         color: Colors.black,
                       ),
                     ),
@@ -75,7 +75,7 @@ class ClassCard extends StatelessWidget {
                           Text(
                             classData.name,
                             style: AppTypography.heading1.copyWith(
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -86,7 +86,7 @@ class ClassCard extends StatelessWidget {
                               Text(
                                 classData.subject,
                                 style: AppTypography.heading2.copyWith(
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.bold,
                                   color: const Color(0xFF0D47A1),
                                 ),
@@ -101,7 +101,7 @@ class ClassCard extends StatelessWidget {
                               Text(
                                 classData.location,
                                 style: AppTypography.heading2.copyWith(
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.bold,
                                   color: const Color(0xFF0D47A1),
                                 ),
@@ -111,13 +111,14 @@ class ClassCard extends StatelessWidget {
 
                           const SizedBox(height: 6),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Time: ${classData.time}',
-                                style: AppTypography.heading2.copyWith(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                              Expanded(
+                                child: Text(
+                                  'Time: ${classData.time}',
+                                  style: AppTypography.heading2.copyWith(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 8),
@@ -132,7 +133,7 @@ class ClassCard extends StatelessWidget {
                                   child: Text(
                                     classData.status.toUpperCase(),
                                     style: AppTypography.heading2.copyWith(
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
