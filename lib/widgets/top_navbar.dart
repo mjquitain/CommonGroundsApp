@@ -22,7 +22,7 @@ class TopNavbar extends StatelessWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.only(left: 15),
         child: Text(
           pageTitle,
-          style: AppTypography.heading2.copyWith(
+          style: AppTypography.heading1.copyWith(
             fontWeight: FontWeight.bold,
           ),
         ),

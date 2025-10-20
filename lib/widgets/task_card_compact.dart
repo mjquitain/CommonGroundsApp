@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:commongrounds/theme/typography.dart';
 import 'package:commongrounds/theme/colors.dart';
-import 'package:commongrounds/model/task.dart';
+import 'package:commongrounds/model/detailed_task.dart';
+import 'package:intl/intl.dart';
 
 class TaskCardCompact extends StatelessWidget {
-  final Task task;
+  final DetailedTask task;
 
   const TaskCardCompact({
     super.key,
@@ -64,7 +65,7 @@ class TaskCardCompact extends StatelessWidget {
                       padding: const EdgeInsets.all(8),
                       child: Icon(
                         task.icon,
-                        size: 32,
+                        size: 28,
                         color: Colors.black,
                       ),
                     ),
@@ -77,7 +78,7 @@ class TaskCardCompact extends StatelessWidget {
                           Text(
                             task.title,
                             style: AppTypography.heading1.copyWith(
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -86,7 +87,7 @@ class TaskCardCompact extends StatelessWidget {
                           Text(
                             task.subject,
                             style: AppTypography.heading2.copyWith(
-                              fontSize: 14,
+                              fontSize: 13,
                               color: Color(0xFF0D47A1),
                               fontWeight: FontWeight.bold,
                             ),
@@ -94,13 +95,14 @@ class TaskCardCompact extends StatelessWidget {
 
                           const SizedBox(height: 6),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "Due: ${task.deadline}",
-                                style: AppTypography.heading2.copyWith(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                              Expanded(
+                                child: Text(
+                                  "Due: ${_formatDeadline(task.deadline)}",
+                                  style: AppTypography.heading2.copyWith(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 8),
@@ -114,7 +116,7 @@ class TaskCardCompact extends StatelessWidget {
                                 child: Text(
                                   task.status.toUpperCase(),
                                   style: AppTypography.heading2.copyWith(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -133,4 +135,9 @@ class TaskCardCompact extends StatelessWidget {
       ),
     );
   }
+}
+
+String _formatDeadline(DateTime date) {
+  final formatter = DateFormat('MMM d, h:mm a');
+  return formatter.format(date);
 }

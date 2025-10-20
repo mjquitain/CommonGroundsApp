@@ -142,15 +142,19 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         ),
                         Text(
                           'CommonGrounds',
-                          style: AppTypography.heading1,
+                          style: AppTypography.heading1.copyWith(
+                            fontSize: 26,
+                          ),
                         ),
                         const SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 40),
                           child: Text(
-                            'Welcome to CommonGrounds,\nyour personal study buddy.\nOrganize your tasks, plan your\nstudies, and stay on track.',
+                            'Welcome to CommonGrounds, your personal study buddy. Organize your tasks, plan your studies, and stay on track.',
                             textAlign: TextAlign.center,
-                            style: AppTypography.heading2,
+                            style: AppTypography.heading2.copyWith(
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 50),

@@ -163,14 +163,18 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                           ),
                           Text(
                             'Welcome Back!',
-                            style: AppTypography.heading1,
+                            style: AppTypography.heading1.copyWith(
+                              fontSize: 26,
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 40),
                             child: Text(
                               'Focus. Plan. Achieve',
                               textAlign: TextAlign.center,
-                              style: AppTypography.heading2,
+                              style: AppTypography.heading2.copyWith(
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 30),

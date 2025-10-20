@@ -4,19 +4,19 @@ import 'colors.dart';
 
 class AppTypography {
   static final TextStyle title = GoogleFonts.nunitoSans(
-    fontSize: 32,
-    fontWeight: FontWeight.bold,
-    color: AppColors.text,
-  );
-
-  static final TextStyle heading1 = GoogleFonts.robotoSlab(
     fontSize: 28,
     fontWeight: FontWeight.bold,
     color: AppColors.text,
   );
 
+  static final TextStyle heading1 = GoogleFonts.robotoSlab(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: AppColors.text,
+  );
+
   static final TextStyle heading2 = GoogleFonts.nunitoSans(
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: FontWeight.normal,
     color: AppColors.text,
   );
@@ -28,7 +28,7 @@ class AppTypography {
   );
 
   static final TextStyle bodySmall = GoogleFonts.nunitoSans(
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: FontWeight.normal,
     color: AppColors.text,
   );
@@ -39,7 +39,7 @@ class AppTypography {
     color: AppColors.text,
   );
 
-  static final TextStyle caption = GoogleFonts.playfairDisplay(
+  static final TextStyle caption = GoogleFonts.robotoSlab(
     fontSize: 12,
     color: AppColors.textDark,
   );

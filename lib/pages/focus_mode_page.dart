@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:commongrounds/theme/colors.dart';
 import 'package:intl/intl.dart';
+import 'package:commongrounds/theme/colors.dart';
+import 'package:commongrounds/theme/typography.dart';
 
 enum FocusModeView { main, timer, history }
 
@@ -178,7 +179,7 @@ class _FocusModePageState extends State<FocusModePage>
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // dialog closes on active timer
+                Navigator.pop(context);
               },
               child: const Text("Cancel"),
             ),
@@ -215,12 +216,12 @@ class _FocusModePageState extends State<FocusModePage>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _buildTimerSection("Focus Mode", focusDuration),
+        _buildTimerSection("Focus Mode", focusDuration, Icons.timer),
         const SizedBox(height: 20),
-        _buildTimerSection("Short Break", shortBreakDuration),
+        _buildTimerSection("Short Break", shortBreakDuration, Icons.coffee),
         const SizedBox(height: 20),
-        _buildTimerSection("Long Break", longBreakDuration),
-        const SizedBox(height: 30),
+        _buildTimerSection("Long Break", longBreakDuration, Icons.nightlight_outlined),
+        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -232,18 +233,23 @@ class _FocusModePageState extends State<FocusModePage>
                     currentView = FocusModeView.history;
                   });
                 },
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: AppColors.navbar.withOpacity(0.3),
+                  foregroundColor: AppColors.text,
+                ),
                 child: const Text("History"),
               ),
             ),
-            const SizedBox(width: 20),
+            const SizedBox(width: 25),
             SizedBox(
               width: 120,
-              child: ElevatedButton(
+              child: OutlinedButton(
                 onPressed: startTimer,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: AppColors.navbar.withOpacity(0.3),
+                  foregroundColor: AppColors.text,
                 ),
-                child: const Text("Start"),
+                child: Text("Start"),
               ),
             ),
           ],
@@ -260,8 +266,8 @@ class _FocusModePageState extends State<FocusModePage>
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [ 
                 _modeButton("Focus Mode"),
                 _modeButton("Short Break"),
                 _modeButton("Long Break"),
@@ -270,14 +276,17 @@ class _FocusModePageState extends State<FocusModePage>
             const SizedBox(height: 20),
             Text(
               currentMode,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: AppTypography.heading1.copyWith(
+                fontSize: 32,
+              ),
             ),
             const SizedBox(height: 10),
             Text(
               formatTime(currentTime),
-              style: const TextStyle(
+              style: AppTypography.heading2.copyWith(
                 fontSize: 64,
                 fontWeight: FontWeight.bold,
+                color: AppColors.textDark.withOpacity(0.9),
               ),
             ),
             const SizedBox(height: 30),
@@ -286,17 +295,20 @@ class _FocusModePageState extends State<FocusModePage>
               children: [
                 OutlinedButton(
                   onPressed: stopTimer,
+                  style: OutlinedButton.styleFrom(foregroundColor: AppColors.text),
                   child: const Text("Stop"),
                 ),
                 const SizedBox(width: 15),
                 if (isRunning)
-                  ElevatedButton(
+                  OutlinedButton(
                     onPressed: pauseTimer,
+                    style: OutlinedButton.styleFrom(foregroundColor: AppColors.text),
                     child: const Text("Pause"),
                   )
                 else
-                  ElevatedButton(
+                  OutlinedButton(
                     onPressed: resumeTimer,
+                    style: OutlinedButton.styleFrom(foregroundColor: AppColors.text),
                     child: const Text("Resume"),
                   ),
               ],
@@ -388,13 +400,22 @@ class _FocusModePageState extends State<FocusModePage>
     );
   }
 
-  Widget _buildTimerSection(String label, Duration duration) {
+  Widget _buildTimerSection(String label, Duration duration, IconData icon) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        Row(
+          children: [
+            Icon(
+              icon,
+              color: AppColors.icon,
+            ),
+            const SizedBox(width: 5),
+            Text(
+              label,
+              style: AppTypography.heading1,
+            ),
+          ],
         ),
         const SizedBox(height: 8),
         GestureDetector(
@@ -406,18 +427,19 @@ class _FocusModePageState extends State<FocusModePage>
           },
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 20),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              color: Colors.grey.shade200,
+              color: AppColors.textField.withOpacity(0.1),
               border: Border.all(color: Colors.grey.shade400),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               "${duration.inMinutes.toString().padLeft(2, '0')}:00",
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 28,
+              style: AppTypography.heading2.copyWith(
+                fontSize: 40,
                 fontWeight: FontWeight.bold,
+                color: AppColors.textDark.withOpacity(0.9),
               ),
             ),
           ),
@@ -433,7 +455,7 @@ class _FocusModePageState extends State<FocusModePage>
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: active ? AppColors.navbar : Colors.grey.shade300,
+          color: active ? AppColors.navbar : AppColors.textField.withOpacity(0.1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
@@ -453,26 +475,37 @@ class _FocusModePageState extends State<FocusModePage>
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Set $mode Minutes"),
+          title: Text("Set $mode Minutes", style: AppTypography.heading1.copyWith(fontSize: 23, letterSpacing: 0.5)),
           content: TextField(
             controller: controller,
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Minutes",
+              labelStyle: AppTypography.heading2.copyWith(fontSize: 18),
+              filled: true,
+              fillColor: AppColors.textField.withOpacity(0.1),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.text),
+              ),
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(foregroundColor: AppColors.text),
               child: const Text("Cancel"),
             ),
-            ElevatedButton(
+            OutlinedButton(
               onPressed: () {
                 final value = int.tryParse(controller.text);
                 if (value != null && value > 0) {
                   Navigator.pop(context, value);
                 }
               },
+              style: OutlinedButton.styleFrom(
+                backgroundColor: AppColors.navbar.withOpacity(0.3),
+                foregroundColor: AppColors.text,
+              ),
               child: const Text("Save"),
             ),
           ],
@@ -483,22 +516,15 @@ class _FocusModePageState extends State<FocusModePage>
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final formattedDate = DateFormat('EEEE, MMM d, y').format(now);
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                formattedDate,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
               Expanded(
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 500),

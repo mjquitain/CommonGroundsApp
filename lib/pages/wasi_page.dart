@@ -1,3 +1,4 @@
+import 'package:commongrounds/theme/typography.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:commongrounds/theme/colors.dart';
@@ -24,24 +25,14 @@ class _WasiPageState extends State<WasiPage> {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final formattedDate = DateFormat('EEEE, MMM d, y').format(now);
-
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+          padding: EdgeInsets.symmetric(horizontal: currentView == WasiView.chat ? 0 : 30, vertical: currentView == WasiView.chat ? 0 : 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // place date at center
-              Text(
-                formattedDate,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-
               Expanded(
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 500),
@@ -69,7 +60,6 @@ class _WasiPageState extends State<WasiPage> {
     );
   }
 
-  // main chat list
   Widget _buildChatListSection() {
     return Column(
       key: const ValueKey('chatList'),
@@ -84,11 +74,14 @@ class _WasiPageState extends State<WasiPage> {
               });
             },
             style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 15),
+              padding: const EdgeInsets.symmetric(vertical: 13),
             ),
-            child: const Text(
+            child: Text(
               "New Chat",
-              style: TextStyle(fontSize: 16),
+              style: AppTypography.button.copyWith(
+                fontSize: 18,
+
+              ),
             ),
           ),
         ),
@@ -98,7 +91,7 @@ class _WasiPageState extends State<WasiPage> {
           decoration: InputDecoration(
             hintText: "Search Chat",
             filled: true,
-            fillColor: Colors.grey.shade200,
+            fillColor: AppColors.textField.withOpacity(0.1),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: Colors.grey.shade400),
@@ -122,7 +115,7 @@ class _WasiPageState extends State<WasiPage> {
                 padding:
                 const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color: AppColors.textField.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: Colors.grey.shade300),
                 ),
@@ -138,59 +131,122 @@ class _WasiPageState extends State<WasiPage> {
     );
   }
 
-  //new chat
   Widget _buildNewChatSection() {
-    return Column(
-      key: const ValueKey('newChat'),
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox(height: 40),
-        const Center(
-          child: Text(
-            "Hi! I'm Wasi!",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-        ),
-        const Spacer(),
-
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.grey.shade400),
-          ),
-          child: Row(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      child: Column(
+        key: const ValueKey('newChat'),
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Expanded(
-                child: TextField(
-                  controller: _chatController,
-                  decoration: const InputDecoration(
-                    hintText: "Type your message...",
-                    border: InputBorder.none,
-                  ),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-              IconButton(
-                onPressed: () {
-
-                },
-                icon: const Icon(Icons.send),
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      currentView = WasiView.main;
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black87,
+                  ),
+                  iconSize: 28,
+                  splashRadius: 28,
+                ),
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 20),
 
-        TextButton(
-          onPressed: () {
-            setState(() {
-              currentView = WasiView.main;
-            });
-          },
-          child: const Text("← Back to Chats"),
-        ),
-      ],
+          const Spacer(),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CircleAvatar(
+                      radius: 16,
+                      backgroundColor: AppColors.navbar.withOpacity(0.3),
+                      child: Icon(
+                        Icons.flutter_dash,
+                        color: Colors.black,
+                        size: 22,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Container(
+                      padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 3,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.circle, size: 8, color: Colors.green),
+                          SizedBox(width: 6),
+                          Text(
+                            "Hi, I'm Wasi!",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 15),
+
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.attach_file_outlined),
+                      ),
+                      Expanded(
+                        child: TextField(
+                          controller: _chatController,
+                          decoration: InputDecoration(
+                            hintText: "Type your message...",
+                            filled: false,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.send),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
