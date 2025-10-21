@@ -4,22 +4,19 @@ import 'package:commongrounds/theme/colors.dart';
 import 'package:commongrounds/theme/typography.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:commongrounds/widgets/starting_textfield.dart';
-import 'package:commongrounds/pages/sign_up_page.dart';
-import 'package:commongrounds/pages/main_page.dart';
+import 'package:commongrounds/pages/main_page.dart' as mainpage;
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateMixin {
+class _SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
-
-  VoidCallback? get onPressed => null;
 
   @override
   void initState() {
@@ -53,25 +50,11 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
     super.dispose();
   }
 
-  void _goToSignUpPage() {
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-        const SignUpPage(),
-        transitionsBuilder:
-            (context, animation, secondaryAnimation, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-        transitionDuration: const Duration(milliseconds: 500),
-      ),
-    );
-  }
-
   void _goToMainPage() {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-        const MainPage(),
+        const mainpage.MainPage(),
         transitionsBuilder:
             (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
@@ -80,7 +63,6 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -163,69 +145,40 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                           ),
                           Text(
                             'Welcome Back!',
-                            style: AppTypography.heading1.copyWith(
-                              fontSize: 26,
-                            ),
+                            style: AppTypography.heading1,
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 40),
                             child: Text(
                               'Focus. Plan. Achieve',
                               textAlign: TextAlign.center,
-                              style: AppTypography.heading2.copyWith(
-                                fontSize: 20,
-                              ),
+                              style: AppTypography.heading2,
                             ),
                           ),
                           const SizedBox(height: 30),
                           CustomTextField(
-                            label: 'Email',
-                            prefixIcon: Icons.email,
+                            label: 'Enter your full name',
                             width: 350,
                           ),
                           CustomTextField(
-                            label: 'Password',
-                            prefixIcon: Icons.lock,
+                            label: 'Enter your email',
+                            width: 350,
+                          ),
+                          CustomTextField(
+                            label: 'Enter password',
                             obscureText: true,
                             width: 350,
                           ),
-                          const SizedBox(height: 10),
-                          FadeTransition(
-                            opacity: _fadeAnimation,
-                            child: SizedBox(
-                              width: 350,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextButton(
-                                    onPressed: _goToSignUpPage,
-                                    child: Text(
-                                      "Don't have an account?",
-                                      style: AppTypography.button.copyWith(
-                                        fontSize: 14,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: onPressed,
-                                    child: Text(
-                                      "Forgot Password?",
-                                      style: AppTypography.button.copyWith(
-                                        fontSize: 14,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                          CustomTextField(
+                            label: 'Confirm password',
+                            obscureText: true,
+                            width: 350,
                           ),
                           const SizedBox(height: 20),
                           FadeTransition(
                             opacity: _fadeAnimation,
                             child: CustomButton(
-                              text: 'Sign In',
+                              text: 'Sign Up',
                               onPressed: _goToMainPage,
                             ),
                           )
