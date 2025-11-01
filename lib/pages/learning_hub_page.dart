@@ -72,18 +72,251 @@ class _LearningHubPageState extends State<LearningHubPage> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => FractionallySizedBox(
-        heightFactor: 0.9,
+        heightFactor: 0.5,
         child: Container(
           decoration: const BoxDecoration(
             color: AppColors.background,
             borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           ),
-          child: TaskDetailPage(task: task),
+          child: TaskDetailPage(
+            task: task,
+            onEdit: () => _editTask(context, task, mockDetailedTasks.indexOf(task)),
+            onDelete: () => _deleteTask(task),
+            onProgressUpdated: (newProgress) {
+              setState(() {
+                task = task.copyWith(progress: newProgress);
+              });
+            },
+          ),
         ),
       ),
     );
   }
 
+  void _deleteTask(DetailedTask task) {
+    setState(() {
+      mockDetailedTasks.remove(task);
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Task deleted')),
+    );
+  }
+
+  void _editTask(BuildContext context, DetailedTask task, int index) {
+    final titleController = TextEditingController(text: task.title);
+    final subjectController = TextEditingController(text: task.subject);
+    final descriptionController = TextEditingController(text: task.description);
+    final statuses = ['Not Started', 'In Progress', 'Completed', 'Overdue'];
+
+    DateTime selectedDeadline = task.deadline;
+    String selectedStatus = task.status;
+    double progress = task.progress;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: const Color(0xFFF8F9FF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+            ),
+            title: Text(
+              'Edit Task',
+              style: AppTypography.heading1.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                  height: 55,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Deadline:",
+                            style: AppTypography.bodySmall,
+                          ),
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: selectedDeadline,
+                            firstDate: DateTime.now().subtract(const Duration(days: 365)),
+                            lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
+                          );
+                          if (picked != null) {
+                            setState(() {
+                              selectedDeadline = picked;
+                            });
+                          }
+                        },
+                        child: Text(
+                          "${selectedDeadline.toLocal()}".split(' ')[0],
+                          style: AppTypography.bodySmall,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+
+                  _buildDropdown(
+                    label: "Status",
+                    value: selectedStatus,
+                    items: statuses,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedStatus = value!;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 10),
+
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Progress"),
+                        Slider(
+                          value: progress,
+                          onChanged: (val) {
+                            setState(() {
+                              progress = val;
+                            });
+                          },
+                          min: 0,
+                          max: 1,
+                          divisions: 10,
+                          label: "${(progress * 100).round()}%",
+                        ),
+                      ],
+                    ),
+                  ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    this.setState(() {
+                      final updatedTask = DetailedTask(
+                        title: titleController.text,
+                        subject: subjectController.text,
+                        description: descriptionController.text,
+                        deadline: selectedDeadline,
+                        priority: task.priority,
+                        status: selectedStatus,
+                        progress: progress,
+                        icon: task.icon,
+                        category: task.category,
+                      );
+                      if (index >= 0 && index < mockDetailedTasks.length) {
+                        mockDetailedTasks[index] = updatedTask;
+                      }
+                      if (index >= 0 && index < tasks.length) {
+                        tasks[index] = updatedTask;
+                      }
+                    });
+                    Navigator.pop(context);
+
+                    Navigator.pop(context);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Task updated successfully!')
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('Save'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildDropdown({
+    required String label,
+    required String value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Container(
+      height: 55,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: value,
+          hint: Row(
+            children: [
+              Text(
+                label,
+                style: AppTypography.bodySmall,
+              ),
+            ],
+          ),
+          items: items.map((item) => DropdownMenuItem(
+            value: item,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    item,
+                    style: AppTypography.bodySmall,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
+              ],
+            ),
+          ))
+              .toList(),
+          onChanged: onChanged,
+          isExpanded: true,
+          dropdownColor: Colors.white,
+
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,15 +422,18 @@ class _LearningHubPageState extends State<LearningHubPage> {
                     )
                   else
                     Column(
-                      children: sortedTasks
-                          .map((task) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: GestureDetector(
-                          onTap: () => _showTaskModal(task),
-                          child: TaskCardDetailed(task: task),
-                        ),
-                      ))
-                          .toList(),
+                      children: sortedTasks.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final task = entry.value;
+
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: GestureDetector(
+                            onTap: () => _showTaskModal(task),
+                            child: TaskCardDetailed(task: task,),
+                          ),
+                        );
+                      }).toList(),
                     ),
 
                   if (showModules && !shouldHideModulesForStatus) ...[
