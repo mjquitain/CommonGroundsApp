@@ -6,10 +6,16 @@ import 'package:intl/intl.dart';
 
 class TaskDetailPage extends StatelessWidget {
   final DetailedTask task;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+  final Function(double)? onProgressUpdated;
 
   const TaskDetailPage({
     super.key,
     required this.task,
+    this.onEdit,
+    this.onDelete,
+    this.onProgressUpdated,
   });
 
   Color _getStatusColor(String status) {
@@ -27,12 +33,37 @@ class TaskDetailPage extends StatelessWidget {
     }
   }
 
+  const TaskDetailPage.readOnly({
+    super.key,
+    required this.task,
+  })  : onEdit = null,
+        onDelete = null,
+        onProgressUpdated = null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(task.title, style: AppTypography.heading1),
+        actions: [
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.edit, size: 20),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                onPressed: onEdit,
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete, size: 20),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                onPressed: onDelete,
+              ),
+            ],
+          )
+        ],
         backgroundColor: AppColors.background,
       ),
       body: Padding(
