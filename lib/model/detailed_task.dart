@@ -22,4 +22,28 @@ class DetailedTask {
     required this.icon,
     required this.category,
   });
+
+  DetailedTask copyWith({
+    String? title,
+    String? subject,
+    String? description,
+    DateTime? deadline,
+    String? priority,
+    String? status,
+    double? progress,
+    IconData? icon,
+    String? category,
+  }) {
+    return DetailedTask(
+      title: title ?? this.title,
+      subject: subject ?? this.subject,
+      description: description ?? this.description,
+      deadline: deadline ?? this.deadline,
+      priority: priority ?? this.priority,
+      status: status ?? this.status,
+      progress: progress ?? this.progress,
+      icon: icon ?? this.icon,
+      category: category ?? this.category,
+    );
+  }
 }
