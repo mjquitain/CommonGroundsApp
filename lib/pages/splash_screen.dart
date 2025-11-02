@@ -132,14 +132,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         SizedBox(
                           width: 150,
                           height: 150,
-                          child: const Center(
-                            child: Icon(
-                              Symbols.owl,
-                              size: 150,
-                              color: Color(0xFF0D47A1),
+                          child: Center(
+                            child: Image.asset(
+                              'assets/group_main.png',
+                              height: 160,
                             ),
                           ),
                         ),
+                        const SizedBox(height: 10),
                         Text(
                           'CommonGrounds',
                           style: AppTypography.heading1.copyWith(
