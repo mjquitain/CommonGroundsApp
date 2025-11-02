@@ -153,11 +153,10 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                           SizedBox(
                             width: 80,
                             height: 80,
-                            child: const Center(
-                              child: Icon(
-                                Symbols.owl,
-                                size: 80,
-                                color: Color(0xFF0D47A1),
+                            child: Center(
+                              child: Image.asset(
+                                'assets/group_main.png',
+                                height: 80,
                               ),
                             ),
                           ),
