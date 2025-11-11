@@ -5,6 +5,7 @@ import 'package:commongrounds/theme/typography.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:commongrounds/widgets/starting_textfield.dart';
 import 'package:commongrounds/pages/main_page.dart' as mainpage;
+import 'package:commongrounds/pages/sign_in_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -60,6 +61,20 @@ class _SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateM
           return FadeTransition(opacity: animation, child: child);
         },
         transitionDuration: const Duration(milliseconds: 500),
+      ),
+    );
+  }
+
+  void _goToSignInPage() {
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+        const SignInPage(),
+        transitionsBuilder:
+            (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        transitionDuration: const Duration(milliseconds: 100),
       ),
     );
   }
@@ -128,7 +143,7 @@ class _SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateM
                   child: ScaleTransition(
                     scale: _scaleAnimation,
                     child: Transform.translate(
-                      offset: const Offset(0, -60),
+                      offset: const Offset(0, 0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -154,7 +169,7 @@ class _SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateM
                               style: AppTypography.heading2,
                             ),
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 10),
                           CustomTextField(
                             label: 'Enter your full name',
                             width: 350,
@@ -173,7 +188,28 @@ class _SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateM
                             obscureText: true,
                             width: 350,
                           ),
-                          const SizedBox(height: 20),
+                          FadeTransition(
+                            opacity: _fadeAnimation,
+                            child: SizedBox(
+                              width: 350,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: _goToSignInPage,
+                                    child: Text(
+                                      "Already have an account?",
+                                      style: AppTypography.button.copyWith(
+                                        fontSize: 14,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
                           FadeTransition(
                             opacity: _fadeAnimation,
                             child: CustomButton(

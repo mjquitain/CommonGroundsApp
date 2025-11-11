@@ -88,7 +88,6 @@ class TaskCardCompact extends StatelessWidget {
                             task.subject,
                             style: AppTypography.heading2.copyWith(
                               fontSize: 13,
-                              color: Color(0xFF0D47A1),
                               fontWeight: FontWeight.bold,
                             ),
                           ),

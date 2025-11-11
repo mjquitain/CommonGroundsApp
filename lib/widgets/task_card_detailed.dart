@@ -106,24 +106,15 @@ class TaskCardDetailed extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 3),
                           Text(
                             task.subject,
                             style: AppTypography.heading2.copyWith(
                               fontSize: 13,
-                              color: Color(0xFF0D47A1),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 8),
-                          Text(
-                            task.description,
-                            style: AppTypography.heading2.copyWith(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -151,7 +142,12 @@ class TaskCardDetailed extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 10),
+                          Text(
+                            "${(task.progress * 100).toInt()}% completed",
+                            style: AppTypography.caption.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 5),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
                             child: LinearProgressIndicator(

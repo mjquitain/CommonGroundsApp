@@ -5,10 +5,8 @@ import 'package:commongrounds/theme/colors.dart';
 import 'package:commongrounds/theme/typography.dart';
 import 'package:commongrounds/widgets/task_card_detailed.dart';
 import 'package:commongrounds/widgets/filter_dropdowns.dart';
-import 'package:commongrounds/widgets/module_card.dart';
 import 'package:commongrounds/pages/task_detail_page.dart';
 import 'package:commongrounds/data/mock_detailed_tasks.dart';
-import 'package:commongrounds/data/mock_modules.dart';
 import 'package:commongrounds/widgets/sync_modal.dart';
 
 class LearningHubPage extends StatefulWidget {
@@ -22,7 +20,6 @@ class LearningHubPage extends StatefulWidget {
 
 class _LearningHubPageState extends State<LearningHubPage> {
   final tasks = mockDetailedTasks;
-  final modules = mockModules;
 
   String? _selectedStatus = 'All';
   String? _selectedCategory = 'All';
@@ -66,13 +63,13 @@ class _LearningHubPageState extends State<LearningHubPage> {
     }
   }
 
-  void _showTaskModal(DetailedTask  task) {
+  void _showTaskModal(DetailedTask task) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => FractionallySizedBox(
-        heightFactor: 0.5,
+        heightFactor: 0.8,
         child: Container(
           decoration: const BoxDecoration(
             color: AppColors.background,
@@ -98,6 +95,8 @@ class _LearningHubPageState extends State<LearningHubPage> {
       mockDetailedTasks.remove(task);
     });
 
+    Navigator.pop(context);
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Task deleted')),
     );
@@ -106,7 +105,7 @@ class _LearningHubPageState extends State<LearningHubPage> {
   void _editTask(BuildContext context, DetailedTask task, int index) {
     final titleController = TextEditingController(text: task.title);
     final subjectController = TextEditingController(text: task.subject);
-    final descriptionController = TextEditingController(text: task.description);
+    final descriptionController = TextEditingController(text: task.simpleDescription);
     final statuses = ['Not Started', 'In Progress', 'Completed', 'Overdue'];
 
     DateTime selectedDeadline = task.deadline;
@@ -122,101 +121,94 @@ class _LearningHubPageState extends State<LearningHubPage> {
               backgroundColor: const Color(0xFFF8F9FF),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-            ),
-            title: Text(
-              'Edit Task',
-              style: AppTypography.heading1.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
               ),
-            ),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                  height: 55,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+              title: Text(
+                'Edit Task',
+                style: AppTypography.heading1.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 55,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "Deadline:",
-                            style: AppTypography.bodySmall,
+                          Text("Deadline:", style: AppTypography.bodySmall),
+                          TextButton(
+                            onPressed: () async {
+                              final picked = await showDatePicker(
+                                context: context,
+                                initialDate: selectedDeadline,
+                                firstDate: DateTime.now().subtract(const Duration(days: 365)),
+                                lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
+                              );
+                              if (picked != null) {
+                                setState(() {
+                                  selectedDeadline = picked;
+                                });
+                              }
+                            },
+                            child: Text(
+                              "${selectedDeadline.toLocal()}".split(' ')[0],
+                              style: AppTypography.bodySmall,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ],
                       ),
-                      TextButton(
-                        onPressed: () async {
-                          final picked = await showDatePicker(
-                            context: context,
-                            initialDate: selectedDeadline,
-                            firstDate: DateTime.now().subtract(const Duration(days: 365)),
-                            lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
-                          );
-                          if (picked != null) {
-                            setState(() {
-                              selectedDeadline = picked;
-                            });
-                          }
-                        },
-                        child: Text(
-                          "${selectedDeadline.toLocal()}".split(' ')[0],
-                          style: AppTypography.bodySmall,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                    ),
+                    const SizedBox(height: 10),
+
+                    _buildDropdown(
+                      label: "Status",
+                      value: selectedStatus,
+                      items: statuses,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedStatus = value!;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.grey.shade300),
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-
-                  _buildDropdown(
-                    label: "Status",
-                    value: selectedStatus,
-                    items: statuses,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedStatus = value!;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 10),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.grey.shade300),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Progress"),
+                          Slider(
+                            value: progress,
+                            onChanged: (val) {
+                              setState(() {
+                                progress = val;
+                              });
+                            },
+                            min: 0,
+                            max: 1,
+                            divisions: 10,
+                            label: "${(progress * 100).round()}%",
+                          ),
+                        ],
+                      ),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Progress"),
-                        Slider(
-                          value: progress,
-                          onChanged: (val) {
-                            setState(() {
-                              progress = val;
-                            });
-                          },
-                          min: 0,
-                          max: 1,
-                          divisions: 10,
-                          label: "${(progress * 100).round()}%",
-                        ),
-                      ],
-                    ),
-                  ),
                   ],
                 ),
               ),
@@ -231,7 +223,7 @@ class _LearningHubPageState extends State<LearningHubPage> {
                       final updatedTask = DetailedTask(
                         title: titleController.text,
                         subject: subjectController.text,
-                        description: descriptionController.text,
+                        simpleDescription: descriptionController.text,
                         deadline: selectedDeadline,
                         priority: task.priority,
                         status: selectedStatus,
@@ -247,12 +239,10 @@ class _LearningHubPageState extends State<LearningHubPage> {
                       }
                     });
                     Navigator.pop(context);
-
                     Navigator.pop(context);
 
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Task updated successfully!')
-                      ),
+                      const SnackBar(content: Text('Task updated successfully!')),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -286,33 +276,16 @@ class _LearningHubPageState extends State<LearningHubPage> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: value,
-          hint: Row(
-            children: [
-              Text(
-                label,
-                style: AppTypography.bodySmall,
-              ),
-            ],
-          ),
-          items: items.map((item) => DropdownMenuItem(
+          hint: Text(label, style: AppTypography.bodySmall),
+          items: items
+              .map((item) => DropdownMenuItem(
             value: item,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    item,
-                    style: AppTypography.bodySmall,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )
-              ],
-            ),
+            child: Text(item, style: AppTypography.bodySmall),
           ))
               .toList(),
           onChanged: onChanged,
           isExpanded: true,
           dropdownColor: Colors.white,
-
         ),
       ),
     );
@@ -320,17 +293,17 @@ class _LearningHubPageState extends State<LearningHubPage> {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveStatus = (_selectedStatus == null) ? 'All' : _selectedStatus!;
-    final effectiveCategory = (_selectedCategory == null) ? 'All' : _selectedCategory!;
+    final effectiveStatus = _selectedStatus ?? 'All';
+    final effectiveCategory = _selectedCategory ?? 'All';
+
     final categoryFiltered = effectiveCategory == 'All'
         ? mockDetailedTasks
-        : mockDetailedTasks .where((task) => task.category == effectiveCategory).toList();
+        : mockDetailedTasks.where((task) => task.category == effectiveCategory).toList();
     final statusFiltered = effectiveStatus == 'All'
         ? categoryFiltered
         : categoryFiltered.where((task) => task.status == effectiveStatus).toList();
+
     final sortedTasks = _sortTasks(statusFiltered);
-    final showModules = effectiveCategory == 'All' || effectiveCategory == 'Module';
-    final shouldHideModulesForStatus = effectiveStatus != 'All';
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -394,25 +367,7 @@ class _LearningHubPageState extends State<LearningHubPage> {
                       ),
                     ],
                   ),
-
-                  const SizedBox(height: 20),
-                  if (effectiveCategory == 'Module') ...[
-                    if (modules.isEmpty)
-                      Center(
-                        child: Text(
-                          'No modules available.',
-                          style: AppTypography.body.copyWith(color: Colors.grey),
-                        ),
-                      )
-                    else
-                      Column(
-                        children: modules.map((module) => Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: ModuleCard(module: module),
-                        ))
-                          .toList(),
-                      ),
-                ] else ...[
+                  const SizedBox(height: 10),
                   if (sortedTasks.isEmpty)
                     Center(
                       child: Text(
@@ -422,30 +377,17 @@ class _LearningHubPageState extends State<LearningHubPage> {
                     )
                   else
                     Column(
-                      children: sortedTasks.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final task = entry.value;
-
+                      children: sortedTasks.map((task) {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: GestureDetector(
                             onTap: () => _showTaskModal(task),
-                            child: TaskCardDetailed(task: task,),
+                            child: TaskCardDetailed(task: task),
                           ),
                         );
                       }).toList(),
                     ),
-
-                  if (showModules && !shouldHideModulesForStatus) ...[
-                    Column(
-                      children: modules.map((module) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: ModuleCard(module: module),
-                      )).toList(),
-                    ),
-                  ],
                 ],
-              ]
               ),
             ),
           ],

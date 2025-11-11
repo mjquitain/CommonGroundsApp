@@ -35,7 +35,7 @@ class _WasiPageState extends State<WasiPage> {
             children: [
               Expanded(
                 child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 300),
                   transitionBuilder: (child, animation) {
                     return FadeTransition(
                       opacity: animation,
@@ -80,7 +80,6 @@ class _WasiPageState extends State<WasiPage> {
               "New Chat",
               style: AppTypography.button.copyWith(
                 fontSize: 18,
-
               ),
             ),
           ),

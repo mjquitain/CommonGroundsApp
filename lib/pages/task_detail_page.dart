@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:commongrounds/model/detailed_task.dart';
+import 'package:commongrounds/model/task_step.dart';
 import 'package:commongrounds/theme/colors.dart';
 import 'package:commongrounds/theme/typography.dart';
 import 'package:intl/intl.dart';
@@ -33,6 +34,19 @@ class TaskDetailPage extends StatelessWidget {
     }
   }
 
+  Color _getPriorityColor(String priority) {
+    switch (priority.toLowerCase()) {
+      case 'high priority':
+        return Colors.redAccent;
+      case 'medium priority':
+        return Colors.orangeAccent;
+      case 'low priority':
+        return Colors.lightGreenAccent;
+      default:
+        return Colors.grey;
+    }
+  }
+
   const TaskDetailPage.readOnly({
     super.key,
     required this.task,
@@ -40,12 +54,54 @@ class TaskDetailPage extends StatelessWidget {
         onDelete = null,
         onProgressUpdated = null;
 
+  Widget _buildDescriptionContent(DetailedTask task) {
+    if (task.simpleDescription != null) {
+      return Text(
+        task.simpleDescription!,
+        style: AppTypography.bodySmall.copyWith(fontSize: 16),
+      );
+    } else if (task.detailedSteps != null && task.detailedSteps!.isNotEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: task.detailedSteps!.map((TaskStep step) {
+          final identifier = step.step != null
+              ? 'Step ${step.step}'
+              : (step.phase ?? 'Item');
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  step.name != null
+                      ? "$identifier: ${step.name!}"
+                      : identifier,
+                  style: AppTypography.body.copyWith(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  step.details,
+                  style: AppTypography.bodySmall.copyWith(fontSize: 14),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      );
+    } else {
+      return Text(
+        "No description provided for this task.",
+        style: AppTypography.bodySmall.copyWith(fontSize: 16, fontStyle: FontStyle.italic),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(task.title, style: AppTypography.heading1),
         actions: [
           Row(
             children: [
@@ -67,17 +123,20 @@ class TaskDetailPage extends StatelessWidget {
         backgroundColor: AppColors.background,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15 ),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(task.title, style: AppTypography.heading1),
+              Text(task.subject, style: AppTypography.heading2.copyWith(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 15),
               Row(
                 children: [
-                  Icon(task.icon, color: AppColors.icon, size: 28),
-                  const SizedBox(width: 10),
-                  Text(task.subject, style: AppTypography.heading2.copyWith(fontSize: 18, color: Color(0xFF0D47A1), fontWeight: FontWeight.bold)),
-                  const Spacer(),
+                  const Icon(Icons.remove_circle_outline, size: 18, color: Colors.grey),
+                  const SizedBox(width: 6),
+                  Text("Status: ", style: AppTypography.caption.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
+                  const SizedBox(width: 6),
                   Container(
                     padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -88,20 +147,38 @@ class TaskDetailPage extends StatelessWidget {
                     child: Text(
                       task.status.toUpperCase(),
                       style: AppTypography.heading2.copyWith(
-                        fontSize: 16,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ],
               ),
-
-              const SizedBox(height: 20),
-              Text("Description", style: AppTypography.body.copyWith(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              Text(task.description, style: AppTypography.bodySmall.copyWith(fontSize: 16)),
-              const SizedBox(height: 20),
-
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const Icon(Icons.flag, size: 18, color: Colors.grey),
+                  const SizedBox(width: 6),
+                  Text("Priority: ", style: AppTypography.caption.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
+                  const SizedBox(width: 6),
+                  Container(
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: _getPriorityColor(task.priority).withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      task.priority.toUpperCase(),
+                      style: AppTypography.heading2.copyWith(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   const Icon(Icons.calendar_today, size: 18, color: Colors.grey),
@@ -111,15 +188,15 @@ class TaskDetailPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(Icons.flag, size: 18, color: Colors.grey),
-                  const SizedBox(width: 6),
-                  Text("Priority: ${task.priority}", style: AppTypography.caption.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
+                  Text("Progress", style: AppTypography.heading1.copyWith(fontSize: 18)),
+                  Text(
+                    "${(task.progress * 100).toInt()}% completed",
+                    style: AppTypography.caption.copyWith(fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
-              const SizedBox(height: 20),
-
-              Text("Progress", style: AppTypography.heading1.copyWith(fontSize: 18)),
               const SizedBox(height: 10),
               LinearProgressIndicator(
                 value: task.progress,
@@ -128,11 +205,10 @@ class TaskDetailPage extends StatelessWidget {
                 minHeight: 8,
                 borderRadius: BorderRadius.circular(10),
               ),
-              const SizedBox(height: 10),
-              Text(
-                "${(task.progress * 100).toInt()}% completed",
-                style: AppTypography.caption.copyWith(fontWeight: FontWeight.bold),
-              ),
+              const SizedBox(height: 15),
+              Text("Description", style: AppTypography.body.copyWith(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              _buildDescriptionContent(task),
             ],
           ),
         ),

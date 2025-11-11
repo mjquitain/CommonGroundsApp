@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 
 class ClassModel {
-  final String name;
   final String subject;
   final String time;
-  final String location;
-  final String status;
+  final String day;
+  final String instructor;
   final IconData icon;
 
   const ClassModel({
-    required this.name,
     required this.subject,
     required this.time,
-    required this.location,
-    required this.status,
+    required this.day,
+    required this.instructor,
     required this.icon
   });
 }
