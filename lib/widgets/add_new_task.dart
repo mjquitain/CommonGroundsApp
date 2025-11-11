@@ -34,7 +34,7 @@ class _AddNewTaskState extends State<AddNewTask> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       backgroundColor: AppColors.background,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +156,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                   final newTask = DetailedTask(
                     title: _titleController.text,
                     subject: selectedSubject!,
-                    description: _descriptionController.text,
+                      simpleDescription: _descriptionController.text,
                     deadline: selectedDate!,
                     priority: selectedPriority!,
                     status: selectedStatus!,
@@ -190,7 +190,7 @@ class _AddNewTaskState extends State<AddNewTask> {
     VoidCallback? onTap,
   }) {
     return Container(
-      height: 55,
+      height: 45,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -202,7 +202,7 @@ class _AddNewTaskState extends State<AddNewTask> {
         onTap: onTap,
         style: AppTypography.heading2,
         decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: Colors.black54),
+          prefixIcon: Icon(icon, size: 20, color: Colors.black54),
           labelText: label,
           labelStyle: AppTypography.bodySmall,
           border: InputBorder.none,
@@ -220,7 +220,7 @@ class _AddNewTaskState extends State<AddNewTask> {
     required Function(String?) onChanged,
   }) {
     return Container(
-      height: 55,
+      height: 45,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -232,7 +232,7 @@ class _AddNewTaskState extends State<AddNewTask> {
           value: value,
           hint: Row(
             children: [
-              Icon(icon, color: Colors.black54),
+              Icon(icon, size: 18, color: Colors.black54),
               const SizedBox(width: 12),
               Text(
                 label,

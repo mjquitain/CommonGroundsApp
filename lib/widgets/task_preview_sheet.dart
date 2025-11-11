@@ -36,26 +36,42 @@ class TaskPreviewSheet extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            Text(task.title, style: AppTypography.heading1),
+            Text(task.title, style: AppTypography.heading1.copyWith(fontSize: 18)),
             const SizedBox(height: 4),
             Text(task.subject, style: AppTypography.heading2.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
 
             const SizedBox(height: 12),
-
-            Text(task.description, style: AppTypography.bodySmall.copyWith(fontSize: 14)),
-            const SizedBox(height: 16),
-
             Row(
               children: [
                 const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
                 const SizedBox(width: 6),
                 Text("Due: ${_formatDeadline(task.deadline)}", style: AppTypography.heading1.copyWith(fontSize: 13, fontWeight: FontWeight.bold)),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Text("Progress", style: AppTypography.heading1.copyWith(fontSize: 13)),
                 const Spacer(),
                 Icon(Icons.flag, size: 16, color: Colors.redAccent),
                 const SizedBox(width: 4),
                 Text(task.priority, style: AppTypography.heading1.copyWith(fontSize: 13, fontWeight: FontWeight.bold)),
               ],
             ),
+            const SizedBox(height: 10),
+            LinearProgressIndicator(
+              value: task.progress,
+              color: AppColors.text,
+              backgroundColor: AppColors.textField.withOpacity(0.2),
+              minHeight: 8,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "${(task.progress * 100).toInt()}% completed",
+              style: AppTypography.caption.copyWith(fontWeight: FontWeight.bold),
+            ),
+
             const SizedBox(height: 24),
 
             SizedBox(

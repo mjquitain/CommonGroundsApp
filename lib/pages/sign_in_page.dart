@@ -62,7 +62,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
             (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
-        transitionDuration: const Duration(milliseconds: 500),
+        transitionDuration: const Duration(milliseconds: 100),
       ),
     );
   }
@@ -146,7 +146,7 @@ class _SignInPageState extends State<SignInPage> with SingleTickerProviderStateM
                   child: ScaleTransition(
                     scale: _scaleAnimation,
                     child: Transform.translate(
-                      offset: const Offset(0, -60),
+                      offset: const Offset(0, 0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

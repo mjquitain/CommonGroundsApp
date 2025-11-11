@@ -1,3 +1,4 @@
+import 'package:commongrounds/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class StatusFilterDropdown extends StatelessWidget {
@@ -71,15 +72,15 @@ class StatusFilterDropdown extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: AppColors.textField.withOpacity(0.1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.filter_alt, color: Colors.white, size: 18),
+            Icon(Icons.filter_alt, color: Colors.black, size: 18),
             SizedBox(width: 4),
-            Icon(Icons.arrow_drop_down, color: Colors.white),
+            Icon(Icons.arrow_drop_down, color: Colors.black),
           ],
         ),
       ),
@@ -101,19 +102,15 @@ class CategoryFilterDropdown extends StatelessWidget {
   static const List<String> categories = [
     'All',
     'Homework',
-    'Report',
-    'Essay',
-    'Project',
-    'Module',
+    'Milestone',
+    'Terminal Assessment',
   ];
 
   static const Map<String, Map<String, dynamic>> categoryStyles = {
-    'All': {'color': const Color(0xFF616161), 'icon': Icons.filter_list},
-    'Homework': {'color': const Color(0xFF7E57C2), 'icon': Icons.book},
-    'Report': {'color': const Color(0xFF0288D1), 'icon': Icons.description},
-    'Essay': {'color': const Color(0xFF009688), 'icon': Icons.edit},
-    'Project': {'color': const Color(0xFFFBC02D), 'icon': Icons.engineering},
-    'Module': {'color': const Color(0xFF5C6BC0), 'icon': Icons.folder},
+    'All': {'color': Color(0xFF616161), 'icon': Icons.filter_list},
+    'Homework': {'color': Color(0xFF7E57C2), 'icon': Icons.book},
+    'Milestone': {'color': Color(0xFF0288D1), 'icon': Icons.description},
+    'Terminal Assessment': {'color': Color(0xFF009688), 'icon': Icons.edit},
   };
 
   @override
@@ -159,15 +156,15 @@ class CategoryFilterDropdown extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: AppColors.textField.withOpacity(0.1),
           borderRadius: BorderRadius.circular(20),
         ),
         child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.category, color: Colors.white, size: 18),
+            Icon(Icons.category, size: 18),
             SizedBox(width: 4),
-            Icon(Icons.arrow_drop_down, color: Colors.white),
+            Icon(Icons.arrow_drop_down),
           ],
         ),
       ),

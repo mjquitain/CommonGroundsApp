@@ -9,7 +9,7 @@ class AppTypography {
     color: AppColors.text,
   );
 
-  static final TextStyle heading1 = GoogleFonts.robotoSlab(
+  static final TextStyle heading1 = GoogleFonts.ptSerif(
     fontSize: 20,
     fontWeight: FontWeight.bold,
     color: AppColors.text,

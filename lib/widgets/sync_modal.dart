@@ -11,7 +11,7 @@ class SyncModal extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       backgroundColor: AppColors.background,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,31 +35,36 @@ class SyncModal extends StatelessWidget {
               style: AppTypography.heading2.copyWith(fontSize: 14),
             ),
             const SizedBox(height: 12),
-            Text("Last synced: September 12, 2025, 12:32", style: AppTypography.heading2.copyWith(fontSize: 14, fontWeight: FontWeight.bold)),
+            Text(
+              "Last Synced: September 12, 2025, 12:32",
+              style: AppTypography.heading2.copyWith(fontSize: 14, fontWeight: FontWeight.bold)
+            ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
               value: null,
               items: [
-                DropdownMenuItem(value: "mapua_malayan", child: Text("Mapúa Malayan Digital College")),
+                DropdownMenuItem(value: "Option 1", child: Text("Option 1"),
+                ),
               ],
               onChanged: (value) {Text("Selected: $value");},
               decoration: const InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Wrap(
-              spacing: 10,
+              alignment: WrapAlignment.start,
+              spacing: 5,
               children: [
                 _checkboxLabel("Sync Tasks"),
                 _checkboxLabel("Sync Modules"),
                 _checkboxLabel("Auto-sync"),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             Center(
               child: OutlinedButton(
                 onPressed: () {},
